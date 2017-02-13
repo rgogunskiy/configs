@@ -47,15 +47,12 @@ endif
 
 " UI
 set laststatus=2
-" colors zenburn
-
+colors zenburn
+set number
 nnoremap <leader>t :tabnew <bar> :TW<CR>
 map <C-n> :NERDTreeToggle<CR>
 
 "" Denite
-
-
-
 "Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
@@ -127,10 +124,11 @@ endif
 " https://github.com/c9s/perlomni.vim
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
-
+" GO Lang
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_types = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
+let g:go_fmt_command = "goimports"
