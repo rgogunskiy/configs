@@ -22,29 +22,25 @@
   )
 
 ;; UI
-(mapc 'global-unset-key '([left] [right] [up] [down]))
-
-(let ((arrow-key-mode-maps '(help-mode-map Info-mode-map)))
-  (mapc
-   (lambda (map)
-     (define-key (symbol-value map) [left] 'left-char)
-     (define-key (symbol-value map) [right] 'right-char)
-     (define-key (symbol-value map) [up] 'previous-line)
-     (define-key (symbol-value map) [down] 'next-line))
-   arrow-key-mode-maps))
 
 (setq default-input-method 'russian-computer)
 (set-default-coding-systems 'utf-8)
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
-(set-default-font "InputMono-10")
+(set-default-font "Monaco-10")
 (when (eq system-type 'linux) ;; linux specific settings
   )
 
 (when (eq system-type 'darwin) ;; mac specific settings
   )
 
-(use-package ivy-mode
+(use-package swiper
+  :ensure t
+  )
+(use-package counsel
+  :ensure t
+  )
+(use-package ivy
   :init
   (require 'ivy)
   (ivy-mode 1)
@@ -138,4 +134,19 @@
   :ensure t
   :init
   (load-theme 'zenburn t)
+  )
+
+(use-package json-mode
+  :ensure t
+  )
+
+(use-package jedi
+  :ensure t
+  )
+
+(use-package python-mode
+  :ensure t
+  :init
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (setq jedi:complete-on-dot t)                 ; optional
   )

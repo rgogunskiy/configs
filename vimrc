@@ -4,10 +4,10 @@ if &compatible
 endif
 
 " Required:
-set runtimepath+=$HOME/vim/repos/github.com/Shougo/dein.vim
+set runtimepath+=$HOME/.vim/repos/github.com/Shougo/dein.vim
 
 " Required:
-call dein#begin('$HOME/vim')
+call dein#begin('$HOME/.vim')
 
 " Let dein manage dein
 " Required:
@@ -24,7 +24,7 @@ call dein#add('avakhov/vim-yaml')
 call dein#add('pearofducks/ansible-vim')
 call dein#add('vim-airline/vim-airline')
 call dein#add('vim-airline/vim-airline-themes')
-call dein#add('blindFS/vim-taskwarrior')
+" call dein#add('blindFS/vim-taskwarrior')
 call dein#add('scrooloose/nerdtree')
 call dein#add('majutsushi/tagbar')
 call dein#add('fatih/vim-go')
@@ -55,7 +55,7 @@ map <C-n> :NERDTreeToggle<CR>
 "" Denite
 "Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
+let g:acp_enableAtStartup = 1
 " Use neocomplete.
 let g:neocomplete#enable_at_startup = 1
 " Use smartcase.
