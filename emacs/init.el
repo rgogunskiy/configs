@@ -27,7 +27,7 @@
 (set-default-coding-systems 'utf-8)
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
-(set-default-font "Monaco-10")
+(set-default-font "Terminess Powerline-10")
 (when (eq system-type 'linux) ;; linux specific settings
   )
 
@@ -133,7 +133,13 @@
 (use-package zenburn-theme
   :ensure t
   :init
-  (load-theme 'zenburn t)
+;;  (load-theme 'zenburn t)
+  )
+
+(use-package color-theme-sanityinc-solarized
+  :ensure t
+  :init
+  (color-theme-sanityinc-solarized-dark)
   )
 
 (use-package json-mode
@@ -142,6 +148,11 @@
 
 (use-package jedi
   :ensure t
+  :config
+  (setq jedi:environment-root "jedi")  ; or any other name you like
+  (setq jedi:environment-virtualenv
+      (append python-environment-virtualenv
+              '("--python" "/usr/bin/python3")))
   )
 
 (use-package python-mode
@@ -149,4 +160,22 @@
   :init
   (add-hook 'python-mode-hook 'jedi:setup)
   (setq jedi:complete-on-dot t)                 ; optional
+  )
+
+(use-package mu4e
+  :init
+  (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+  ;;  (require 'mu4e)
+  :config
+  (load-file "~/configs/emacs/mu4e.el")
+  )
+
+(use-package persistent-scratch
+  :ensure t
+  :config
+  (persistent-scratch-setup-default)
+  )
+
+(use-package magit
+  :ensure t
   )
