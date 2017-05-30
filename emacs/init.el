@@ -27,7 +27,8 @@
 (set-default-coding-systems 'utf-8)
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
-(set-default-font "Terminess Powerline-10")
+;;(set-default-font "Terminess Powerline-10")
+(set-default-font "Go Mono for Powerline-10")
 (when (eq system-type 'linux) ;; linux specific settings
   )
 
@@ -67,79 +68,79 @@
   :ensure t
   )
 
-(use-package go-eldoc
-  :ensure t
-  :init
-  (defun go-mode-setup ()
-    (go-eldoc-setup))
-  )
+;; (use-package go-eldoc
+;;   :ensure t
+;;   :init
+;;   (defun go-mode-setup ()
+;;     (go-eldoc-setup))
+;;   )
 
-(use-package go-autocomplete
-  :ensure t
-  :init
-  (ac-config-default)
-  (require 'auto-complete-config)
-  (require 'go-autocomplete)
-  )
+;; (use-package go-autocomplete
+;;   :ensure t
+;;   :init
+;;   (ac-config-default)
+;;   (require 'auto-complete-config)
+;;   (require 'go-autocomplete)
+;;   )
 
-(use-package golint
-  :ensure t
-  )
+;; (use-package golint
+;;   :ensure t
+;;   )
 
-(use-package project-explorer
-  :ensure t
-  :init
-  (require 'project-explorer)
-  (global-set-key (kbd "M-e") 'project-explorer-toggle)
-  )
-(use-package go-mode
-  :ensure t
-  :init
-  (electric-pair-mode 1)
-  (defun go-mode-setup ()
-    (go-eldoc-setup)
-    (add-hook 'before-save-hook 'gofmt-before-save))
-  (add-hook 'go-mode-hook 'go-mode-setup)  
-  (defun go-mode-setup ()
-    (go-eldoc-setup)
-    (setq gofmt-command "goimports")
-    (add-hook 'before-save-hook 'gofmt-before-save))
-  (add-hook 'go-mode-hook 'go-mode-setup)
+;; (use-package project-explorer
+;;   :ensure t
+;;   :init
+;;   (require 'project-explorer)
+;;   (global-set-key (kbd "M-e") 'project-explorer-toggle)
+;;   )
+;; (use-package go-mode
+;;   :ensure t
+;;   :init
+;;   (electric-pair-mode 1)
+;;   (defun go-mode-setup ()
+;;     (go-eldoc-setup)
+;;     (add-hook 'before-save-hook 'gofmt-before-save))
+;;   (add-hook 'go-mode-hook 'go-mode-setup)  
+;;   (defun go-mode-setup ()
+;;     (go-eldoc-setup)
+;;     (setq gofmt-command "goimports")
+;;     (add-hook 'before-save-hook 'gofmt-before-save))
+;;   (add-hook 'go-mode-hook 'go-mode-setup)
 
-  ;;Godef, shows function definition when calling godef-jump
-  (defun go-mode-setup ()
-    (go-eldoc-setup)
-    (setq gofmt-command "goimports")
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    (local-set-key (kbd "M-.") 'godef-jump))
-  (add-hook 'go-mode-hook 'go-mode-setup)
-  ;;Custom Compile Command
-  (defun go-mode-setup ()
-    (setq compile-command "go build -v && go test -v && go vet && golint")
-    (define-key (current-local-map) "\C-c\C-c" 'compile)
-    (go-eldoc-setup)
-    (setq gofmt-command "goimports")
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    (local-set-key (kbd "M-.") 'godef-jump))
-  (add-hook 'go-mode-hook 'go-mode-setup)
+;;   ;;Godef, shows function definition when calling godef-jump
+;;   (defun go-mode-setup ()
+;;     (go-eldoc-setup)
+;;     (setq gofmt-command "goimports")
+;;     (add-hook 'before-save-hook 'gofmt-before-save)
+;;     (local-set-key (kbd "M-.") 'godef-jump))
+;;   (add-hook 'go-mode-hook 'go-mode-setup)
+;;   ;;Custom Compile Command
+;;   (defun go-mode-setup ()
+;;     (setq compile-command "go build -v && go test -v && go vet && golint")
+;;     (define-key (current-local-map) "\C-c\C-c" 'compile)
+;;     (go-eldoc-setup)
+;;     (setq gofmt-command "goimports")
+;;     (add-hook 'before-save-hook 'gofmt-before-save)
+;;     (local-set-key (kbd "M-.") 'godef-jump))
+;;   (add-hook 'go-mode-hook 'go-mode-setup)
 
-  ;;Configure golint
-  (add-to-list 'load-path (concat (getenv "GOPATH")  "/src/github.com/golang/lint/misc/emacs"))
-  (require 'golint)
-  (add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
-  (require 'go-flycheck)  
-  )
+;;   ;;Configure golint
+;;   (add-to-list 'load-path (concat (getenv "GOPATH")  "/src/github.com/golang/lint/misc/emacs"))
+;;   (require 'golint)
+;;   (add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
+;;   (require 'go-flycheck)  
+;;   )
 
 (use-package zenburn-theme
   :ensure t
   :init
-;;  (load-theme 'zenburn t)
+  (load-theme 'zenburn t)
   )
 
 (use-package color-theme-sanityinc-solarized
   :ensure t
-  :init
-  (color-theme-sanityinc-solarized-dark)
+  ;; :init
+  ;; (color-theme-sanityinc-solarized-dark)
   )
 
 (use-package json-mode
@@ -162,13 +163,13 @@
   (setq jedi:complete-on-dot t)                 ; optional
   )
 
-(use-package mu4e
-  :init
-  (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
-  ;;  (require 'mu4e)
-  :config
-  (load-file "~/configs/emacs/mu4e.el")
-  )
+;; (use-package mu4e
+;;   :init
+;;   (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+;;   ;;  (require 'mu4e)
+;;   :config
+;;   (load-file "~/configs/emacs/mu4e.el")
+;;   )
 
 (use-package persistent-scratch
   :ensure t
@@ -177,5 +178,9 @@
   )
 
 (use-package magit
+  :ensure t
+  )
+
+(use-package dockerfile-mode
   :ensure t
   )
