@@ -21,8 +21,7 @@ call dein#add('zchee/deoplete-jedi')
 call dein#add('Shougo/neosnippet-snippets')
 call dein#add('Shougo/vimshell')
 call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
-" call dein#add('Shougo/denite.nvim')
-call dein#add('Shougo/deoplete.nvim')
+call dein#add('Shougo/denite.nvim')
 call dein#add('avakhov/vim-yaml')
 call dein#add('pearofducks/ansible-vim')
 call dein#add('vim-airline/vim-airline')
@@ -67,3 +66,9 @@ let g:go_fmt_command = "goimports"
 
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
+
+" Denite
+call denite#custom#map('insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
+call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>', 'noremap')
+call denite#custom#map('insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
+call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>', 'noremap')
