@@ -152,8 +152,13 @@
   :config
   (setq jedi:environment-root "jedi")  ; or any other name you like
   (setq jedi:environment-virtualenv
-      (append python-environment-virtualenv
-              '("--python" "/usr/bin/python3")))
+	(when (eq system-type 'darwin) ;; mac specific settings
+	  (append python-environment-virtualenv
+		  '("--python" "/usr/local/bin/python3"))))
+
+	(when (eq system-type 'linux) ;; linux specific settings
+	  (append python-environment-virtualenv
+		  '("--python" "/usr/bin/python3")))
   )
 
 (use-package python-mode

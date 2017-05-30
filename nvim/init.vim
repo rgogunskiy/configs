@@ -49,7 +49,7 @@ endif
 
 " UI
 set laststatus=2
-" colors zenburn
+colors zenburn
 set number
 nnoremap <leader>t :tabnew <bar> :TW<CR>
 map <C-n> :NERDTreeToggle<CR>
@@ -72,3 +72,12 @@ call denite#custom#map('insert', '<C-j>', '<denite:move_to_next_line>', 'noremap
 call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>', 'noremap')
 call denite#custom#map('insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
 call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>', 'noremap')
+ 
+nnoremap <leader>b :Denite buffer<cr>
+nnoremap <leader>f :Denite file_rec<cr>
+nnoremap <leader>g :Denite grep:.<cr>
+nnoremap <leader>t :Denite tag<cr>
+nnoremap <leader>y :Denite history/yank<cr>
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources#jedi#show_docstring = 0
