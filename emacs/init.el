@@ -34,6 +34,7 @@
 
 (when (eq system-type 'darwin) ;; mac specific settings
   )
+(global-linum-mode t)
 
 (use-package swiper
   :ensure t
@@ -64,9 +65,6 @@
   :ensure t
   )
 
-(use-package flycheck
-  :ensure t
-  )
 
 ;; (use-package go-eldoc
 ;;   :ensure t
@@ -133,8 +131,8 @@
 
 (use-package zenburn-theme
   :ensure t
-  :init
-  (load-theme 'zenburn t)
+  ;; :init
+  ;; (load-theme 'zenburn t)		
   )
 
 (use-package color-theme-sanityinc-solarized
@@ -143,29 +141,14 @@
   ;; (color-theme-sanityinc-solarized-dark)
   )
 
-(use-package json-mode
-  :ensure t
-  )
-
-(use-package jedi
-  :ensure t
-  :config
-  (setq jedi:environment-root "jedi")  ; or any other name you like
-  (setq jedi:environment-virtualenv
-	(when (eq system-type 'darwin) ;; mac specific settings
-	  (append python-environment-virtualenv
-		  '("--python" "/usr/local/bin/python3"))))
-
-	(when (eq system-type 'linux) ;; linux specific settings
-	  (append python-environment-virtualenv
-		  '("--python" "/usr/bin/python3")))
-  )
-
-(use-package python-mode
+(use-package material-theme
   :ensure t
   :init
-  (add-hook 'python-mode-hook 'jedi:setup)
-  (setq jedi:complete-on-dot t)                 ; optional
+  (load-theme 'material t)
+  )
+
+(use-package json-mode
+  :ensure t
   )
 
 ;; (use-package mu4e
@@ -189,3 +172,38 @@
 (use-package dockerfile-mode
   :ensure t
   )
+
+
+(use-package flycheck
+  :ensure t
+  )
+
+(use-package py-autopep8
+  :ensure t
+
+  )
+
+(use-package ein
+  :ensure t
+  )
+(use-package elpy
+  :ensure t
+  :init
+  (setq python-shell-unbuffered nil)
+  (setq python-shell-prompt-detect-failure-warning nil)
+  (setq python-shell-prompt-detect-enabled nil)
+  (pyvenv-activate "~/.venv/3/emacs")
+  (elpy-enable)
+  (elpy-use-ipython)
+  (when (require 'flycheck nil t)
+    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+    (add-hook 'elpy-mode-hook 'flycheck-mode))
+  (require 'py-autopep8)
+  (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+
+  )
+
+(use-package magit
+  :ensure t
+  )
+	    
