@@ -30,6 +30,7 @@ call dein#add('blindFS/vim-taskwarrior')
 call dein#add('scrooloose/nerdtree')
 call dein#add('majutsushi/tagbar')
 call dein#add('fatih/vim-go')
+call dein#add('w0rp/ale')
 "call dein#add('Valloric/YouCompleteMe')
 
 
@@ -62,7 +63,11 @@ let g:go_highlight_fields = 1
 let g:go_highlight_types = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_structs = 1
+
 let g:go_fmt_command = "goimports"
+let g:go_auto_sameids = 1
 
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
@@ -81,3 +86,11 @@ nnoremap <leader>y :Denite history/yank<cr>
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources#jedi#show_docstring = 0
+
+
+" ale
+" Error and warning signs.
+let g:ale_sign_error = '⤫'
+let g:ale_sign_warning = '⚠'
+" Enable integration with airline.
+let g:airline#extensions#ale#enabled = 1
