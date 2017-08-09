@@ -27,13 +27,17 @@
 (set-default-coding-systems 'utf-8)
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
-;;(set-default-font "Terminess Powerline-10")
-(set-default-font "Go Mono for Powerline-10")
-(when (eq system-type 'linux) ;; linux specific settings
-  )
 
-(when (eq system-type 'darwin) ;; mac specific settings
-  )
+;; set default font in initial window and for any new window
+(cond
+ ;; ((string-equal system-type "windows-nt") ; Microsoft Windows
+ ;;  (when (member "DejaVu Sans Mono" (font-family-list))
+ ;;    (add-to-list 'initial-frame-alist '(font . "DejaVu Sans Mono-10"))
+ ;;    (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10"))))
+ ((string-equal system-type "darwin") ; Mac OS X
+  (set-default-font "Monaco-12"))
+ ((string-equal system-type "gnu/linux") ; linux
+  (set-default-font "Terminess Poweline-10")))
 (global-linum-mode t)
 
 (use-package swiper

@@ -49,7 +49,7 @@ endif
 
 " UI
 set laststatus=2
-colors zenburn
+" colors zenburn
 set number
 nnoremap <leader>t :tabnew <bar> :TW<CR>
 map <C-n> :NERDTreeToggle<CR>
