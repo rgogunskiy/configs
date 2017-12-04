@@ -1,3 +1,5 @@
+let g:python3_host_prog = "/home/rgogunskiy/.pyenv/versions/nvim3/bin/python"
+let g:python_host_prog = "/home/rgogunskiy/.pyenv/versions/nvim2/bin/python"
 "dein Scripts-----------------------------
 if &compatible
   set nocompatible               " Be iMproved
@@ -15,23 +17,19 @@ call dein#add('Shougo/dein.vim')
 
 " Add or remove your plugins here:
 call dein#add('Shougo/neosnippet.vim')
-" call dein#add('Shougo/neocomplete.vim')
 call dein#add('Shougo/deoplete.nvim')
 call dein#add('zchee/deoplete-jedi')
 call dein#add('Shougo/neosnippet-snippets')
-call dein#add('Shougo/vimshell')
-call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
 call dein#add('Shougo/denite.nvim')
 call dein#add('avakhov/vim-yaml')
 call dein#add('pearofducks/ansible-vim')
 call dein#add('vim-airline/vim-airline')
 call dein#add('vim-airline/vim-airline-themes')
-call dein#add('blindFS/vim-taskwarrior')
 call dein#add('scrooloose/nerdtree')
 call dein#add('majutsushi/tagbar')
 call dein#add('fatih/vim-go')
-"call dein#add('Valloric/YouCompleteMe')
-
+call dein#add('vim-pandoc/vim-pandoc')
+call dein#add('vim-pandoc/vim-pandoc-syntax')
 
 " Required:
 call dein#end()
@@ -49,8 +47,19 @@ endif
 
 " UI
 set laststatus=2
+" show existing tab with 4 spaces width
+set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
 " colors zenburn
 set number
+set keymap=russian-jcukenwin
+set iminsert=0
+set imsearch=0
+highlight lCursor guifg=NONE guibg=Cyan
+
 nnoremap <leader>t :tabnew <bar> :TW<CR>
 map <C-n> :NERDTreeToggle<CR>
 
@@ -81,3 +90,5 @@ nnoremap <leader>y :Denite history/yank<cr>
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources#jedi#show_docstring = 0
+
+setlocal spell spelllang=ru_ru,en_us

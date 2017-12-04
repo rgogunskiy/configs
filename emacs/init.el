@@ -1,4 +1,4 @@
-;;Load package-install sources
+;Load package-install sources
 (when (>= emacs-major-version 24)
   (require 'package)
   (add-to-list
@@ -27,17 +27,14 @@
 (set-default-coding-systems 'utf-8)
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 
 ;; set default font in initial window and for any new window
 (cond
- ;; ((string-equal system-type "windows-nt") ; Microsoft Windows
- ;;  (when (member "DejaVu Sans Mono" (font-family-list))
- ;;    (add-to-list 'initial-frame-alist '(font . "DejaVu Sans Mono-10"))
- ;;    (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10"))))
  ((string-equal system-type "darwin") ; Mac OS X
   (set-default-font "Monaco-12"))
  ((string-equal system-type "gnu/linux") ; linux
-  (set-default-font "Terminess Poweline-10")))
+  (set-default-font "Terminess Powerline-10")))
 (global-linum-mode t)
 
 (use-package swiper
@@ -135,8 +132,8 @@
 
 (use-package zenburn-theme
   :ensure t
-  ;; :init
-  ;; (load-theme 'zenburn t)		
+  :init
+  (load-theme 'zenburn t)		
   )
 
 (use-package color-theme-sanityinc-solarized
@@ -145,11 +142,11 @@
   ;; (color-theme-sanityinc-solarized-dark)
   )
 
-(use-package material-theme
-  :ensure t
-  :init
-  (load-theme 'material t)
-  )
+;; (use-package material-theme
+;;   :ensure t
+;;   :init
+;;   (load-theme 'material t)
+;;   )
 
 (use-package json-mode
   :ensure t
@@ -190,15 +187,22 @@
 (use-package ein
   :ensure t
   )
+(use-package pyenv-mode
+  :ensure t
+  :init
+  (pyenv-mode)
+  )
 (use-package elpy
   :ensure t
   :init
   (setq python-shell-unbuffered nil)
   (setq python-shell-prompt-detect-failure-warning nil)
   (setq python-shell-prompt-detect-enabled nil)
-  (pyvenv-activate "~/.venv/3/emacs")
+  (setq elpy-rpc-python-command "~/.pyenv/versions/emacs3/bin/python")
+  (pyvenv-activate "~/.pyenv/versions/emacs3/bin/python")
   (elpy-enable)
-  (elpy-use-ipython)
+  (elpy-use-ipython "~/.pyenv/versions/emacs3/bin/ipython")
+
   (when (require 'flycheck nil t)
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     (add-hook 'elpy-mode-hook 'flycheck-mode))
@@ -210,4 +214,26 @@
 (use-package magit
   :ensure t
   )
-	    
+
+(use-package markdown-mode
+  :ensure t
+  :config
+  ;; (custom-set-faces
+  ;;  '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
+  ;;  '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.8))))
+  ;;  '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.4))))
+  ;;  '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.2)))))
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown")
+  )
+
+
+(use-package markdown-preview-mode
+  :ensure t
+  )
+
+(load-file "~/configs/emacs/org-mode.el")
+
