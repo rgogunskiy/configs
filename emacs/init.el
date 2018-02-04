@@ -34,7 +34,8 @@
  ((string-equal system-type "darwin") ; Mac OS X
   (set-default-font "Monaco-12"))
  ((string-equal system-type "gnu/linux") ; linux
-  (set-default-font "Terminess Powerline-10")))
+  ;; (set-default-font "Terminess Powerline-10")))
+  (set-default-font "Source Code Pro for Powerline-10")))
 (global-linum-mode t)
 
 (use-package swiper
@@ -201,8 +202,9 @@
   (setq elpy-rpc-python-command "~/.pyenv/versions/emacs3/bin/python")
   (pyvenv-activate "~/.pyenv/versions/emacs3/bin/python")
   (elpy-enable)
-  (elpy-use-ipython "~/.pyenv/versions/emacs3/bin/ipython")
-
+  ;; (elpy-use-ipython "~/.pyenv/versions/emacs3/bin/ipython")
+  (setq python-shell-interpreter "~/.pyenv/versions/emacs3/bin/ipython"
+      python-shell-interpreter-args "-i --simple-prompt")
   (when (require 'flycheck nil t)
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     (add-hook 'elpy-mode-hook 'flycheck-mode))
