@@ -1,5 +1,5 @@
-let g:python3_host_prog = "/home/rgogunskiy/.pyenv/versions/nvim3/bin/python"
-let g:python_host_prog = "/home/rgogunskiy/.pyenv/versions/nvim2/bin/python"
+let g:python3_host_prog = $HOME.'/.pyenv/versions/nvim3/bin/python'
+let g:python_host_prog = $HOME.'/.pyenv/versions/nvim2/bin/python'
 "dein Scripts-----------------------------
 if &compatible
   set nocompatible               " Be iMproved
@@ -91,4 +91,4 @@ nnoremap <leader>y :Denite history/yank<cr>
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources#jedi#show_docstring = 0
 
-setlocal spell spelllang=ru_ru,en_us
+" setlocal spell spelllang=ru_ru,en_us
