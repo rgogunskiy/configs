@@ -237,4 +237,4 @@
   )
 
 (load-file "~/configs/emacs/org-mode.el")
-
+(load-file "~/configs/emacs/gnus.el")
