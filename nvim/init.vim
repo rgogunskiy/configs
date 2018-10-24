@@ -30,6 +30,10 @@ call dein#add('majutsushi/tagbar')
 call dein#add('fatih/vim-go')
 call dein#add('vim-pandoc/vim-pandoc')
 call dein#add('vim-pandoc/vim-pandoc-syntax')
+call dein#add('ledger/vim-ledger')
+call dein#add('hashivim/vim-vagrant')
+" call dein#add('tpope/vim-commentary')
+call dein#add('tomtom/tcomment_vim')
 
 " Required:
 call dein#end()

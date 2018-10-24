@@ -19,10 +19,23 @@
   (setq mac-option-modifier 'control)
   (setq mac-command-modifier 'meta)
   (global-set-key [kp-delete] 'delete-char) ;; sets fn-delete to be right-delete
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+    (setq exec-path (append exec-path '("/usr/local/bin")))
   )
-
-;; UI
-
+; (global-unset-key (kbd "<left>"))
+; (global-unset-key (kbd "<right>"))
+; (global-unset-key (kbd "<up>"))
+; (global-unset-key (kbd "<down>"))
+; (global-unset-key (kbd "<C-left>"))
+; (global-unset-key (kbd "<C-right>"))
+; (global-unset-key (kbd "<C-up>"))
+; (global-unset-key (kbd "<C-down>"))
+; (global-unset-key (kbd "<M-left>"))
+; (global-unset-key (kbd "<M-right>"))
+; (global-unset-key (kbd "<M-up>"))
+; (global-unset-key (kbd "<M-down>"))
+; ;; UI
+(setq visible-bell 1)
 (setq default-input-method 'russian-computer)
 (set-default-coding-systems 'utf-8)
 (setq inhibit-startup-message t)
@@ -32,7 +45,7 @@
 ;; set default font in initial window and for any new window
 (cond
  ((string-equal system-type "darwin") ; Mac OS X
-  (set-default-font "Go Mono for Powerline-12"))
+  (set-default-font "InputMono-14"))
  ((string-equal system-type "gnu/linux") ; linux
   ;; (set-default-font "Terminess Powerline-10")))
   (set-default-font "Source Code Pro for Powerline-10")))
@@ -133,14 +146,14 @@
 
 (use-package zenburn-theme
   :ensure t
-  :init
-  (load-theme 'zenburn t)		
+  ;; :init
+  ;; (load-theme 'zenburn t)		
   )
 
 (use-package color-theme-sanityinc-solarized
   :ensure t
-  ;; :init
-  ;; (color-theme-sanityinc-solarized-dark)
+  :init
+  (color-theme-sanityinc-solarized-dark)
   )
 
 ;; (use-package material-theme
@@ -235,6 +248,36 @@
 (use-package markdown-preview-mode
   :ensure t
   )
+
+(use-package ledger-mode
+  :ensure t
+  :init
+  (add-hook 'ledger-mode-hook #'ledger-flymake-enable)
+  )
+
+
+(use-package org-capture
+  :ensure nil
+  :after org
+  :preface
+  (defvar my/org-ledger-card-tinkoff-black "%(org-read-date) %^{Payee}
+  Расходы:%^{Account}  %^{Amount}₽
+  Активы:Тинькофф:Black" "Template for Tinkoff Black transaction with ledger.")
+
+  (defvar my/org-ledger-card-tinkoff-credit "%(org-read-date) * %^{Payee}
+  Расходы:%^{Account}  %^{Amount}₽
+  Обязательства:Тинькофф:Кредитная карта" "Template for Tinkoff credit card with ledger.")
+  :custom
+  (org-capture-templates
+   `(("l" "Ledger")
+     ("lb" "Tinkoff" plain (file ,(format "~/Dropbox/ledger/%s.ledger" (format-time-string "%Y"))),
+      my/org-ledger-card-tinkoff-black
+      :empty-lines 1
+      :immediate-finish t)
+     ("lc" "Tinkoff credit" plain (file ,(format "~/Dropbox/ledger/%s.ledger" (format-time-string "%Y"))),
+      my/org-ledger-card-tinkoff-credit
+      :empty-lines 1
+      :immediate-finish t))))
 
 (load-file "~/configs/emacs/org-mode.el")
 (load-file "~/configs/emacs/gnus.el")

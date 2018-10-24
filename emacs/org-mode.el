@@ -27,10 +27,10 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 
 ;; Capture templates for: TODO tasks, Notes, appointments, phone calls, meetings, and org-protocol
-(setq org-capture-templates
-      (quote (("t" "todo" entry (file "~/git/org/refile.org")
-               "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-	      )))
+;; (setq org-capture-templates
+;;       (quote (("t" "todo" entry (file "~/git/org/refile.org")
+;;                "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+;; 	      )))
 
 (defun my/org-mode-hook ()
   "Stop the org-level headers from increasing in height relative to the other text."
