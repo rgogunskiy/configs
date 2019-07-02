@@ -15,9 +15,20 @@ CertificateFile /etc/ssl/certs/ca-certificates.crt
 #   SPECIFICATION OF AN IMAP ACCOUNT)
 # - THE LOCAL STORAGE IS WHERE WE STORE THE EMAIL ON OUR COMPUTER
 
+IMAPAccount bizone
+Host 127.0.0.1
+Port 1143
+User r.gogunskiy
+PassCmd "gpg -d ~/.mail/bizone.gpg"
+AuthMechs LOGIN
+SSLType None
+
 # REMOTE STORAGE (USE THE IMAP ACCOUNT SPECIFIED ABOVE)
 IMAPStore gmail-remote
 Account gmail
+
+IMAPStore bizone-remote
+Account bizone
 
 # LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p Maildir/gmail)
 MaildirStore gmail-local
@@ -69,6 +80,14 @@ Create Both
 Expunge Both
 SyncState *
 
+Channel gmail-drafts
+Master :gmail-remote:"[Gmail]/Drafts"
+Slave :gmail-local:"drafts"
+Create Both
+Expunge Both
+SyncState *
+
+
 # GROUPS PUT TOGETHER CHANNELS, SO THAT WE CAN INVOKE
 # MBSYNC ON A GROUP TO SYNC ALL CHANNELS
 #
@@ -81,3 +100,60 @@ Channel gmail-sent
 Channel gmail-trash
 Channel gmail-all
 Channel gmail-starred
+Channel gmail-drafts
+
+
+
+
+# LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p Maildir/bizone)
+MaildirStore bizone-local
+Path ~/.mail/bizone/
+Inbox ~/.mail/bizone/INBOX
+
+# CONNECTIONS SPECIFY LINKS BETWEEN REMOTE AND LOCAL FOLDERS
+#
+# CONNECTIONS ARE SPECIFIED USING PATTERNS, WHICH MATCH REMOTE MAIl
+# FOLDERS. SOME COMMONLY USED PATTERS INCLUDE:
+#
+# 1 "*" TO MATCH EVERYTHING
+# 2 "!DIR" TO EXCLUDE "DIR"
+# 3 "DIR" TO MATCH DIR
+
+Channel bizone-inbox
+Master :bizone-remote:
+Slave :bizone-local:
+Patterns "INBOX"
+Create Both
+Expunge Both
+SyncState *
+
+Channel bizone-sent
+Master :bizone-remote:"Sent"
+Slave :bizone-local:"sent"
+#Patterns "Sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel bizone-jira
+Master :bizone-remote:"Рассылки/Jira"
+Slave :bizone-local:"jira"
+#Patterns "Sent"
+Create Both
+Expunge Both
+SyncState *
+
+Channel bizone-confluence
+Master :bizone-remote:"Рассылки/Confluence"
+Slave :bizone-local:"confluence"
+#Patterns "Sent"
+Create Both
+Expunge Both
+SyncState *
+
+
+Group bizone
+Channel bizone-inbox
+Channel bizone-sent
+Channel bizone-jira
+Channel bizone-confluence
