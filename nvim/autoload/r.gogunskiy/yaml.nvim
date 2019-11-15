@@ -1,0 +1,11 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                        Yaml-Language-Server Helpers                         "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! r.gogunskiy#yaml#SetSchema()
+    if &ft=="yaml"
+        let schema = &filetype
+        echom "Yaml-Language-Server using " . schema . " schema."
+        let config = json_decode(system("cat ~/.config/nvim/yaml/" . schema . ".json"))
+        call LanguageClient#Notify('workspace/didChangeConfiguration', { 'settings': config })
+    endif
+endfunction

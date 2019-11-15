@@ -30,14 +30,15 @@ call dein#add('scrooloose/nerdtree')
 call dein#add('scrooloose/nerdcommenter')
 call dein#add('tpope/vim-fugitive')
 call dein#add('hashivim/vim-terraform')
-" call dein#add('neoclide/coc.nvim', {'merge':0, 'build': './install.sh nightly'})
-call dein#add('neoclide/coc.nvim', {'branch': 'release', 'hook_post_source': 'call coc#util#install()'})
+call dein#add('neoclide/coc.nvim', {'merge':0, 'build': './install.sh nightly'})
+" call dein#add('neoclide/coc.nvim', {'branch': 'release', 'hook_post_source': 'call coc#util#install()'})
 call dein#add('fatih/vim-go')
 call dein#add('jiangmiao/auto-pairs')
 call dein#add('NLKNguyen/papercolor-theme')
 call dein#add('liuchengxu/vista.vim')
 call dein#add('airblade/vim-gitgutter')
 call dein#add('tpope/vim-surround')
+call dein#add('lifepillar/vim-solarized8')
 " Required:
 call dein#end()
 
@@ -68,7 +69,8 @@ set expandtab
 "let g:airline_theme='one'
 " colorscheme dracula
  set background=light " for the light version
-colorscheme PaperColor
+"colorscheme PaperColor
+colorscheme solarized8_high
 set cursorline
 set cursorcolumn
 
@@ -204,7 +206,7 @@ function! s:denite_my_settings() abort
   \ denite#do_map('open_filter_buffer')
   nnoremap <silent><buffer><expr> <C-v>
   \ denite#do_map('do_action', 'vsplit')
-  nnoremap <silent><buffer><expr> <C-x>
+  nnoremap <silent><buffer><expr> <C-s>
   \ denite#do_map('do_action', 'split')
   nnoremap <silent><buffer><expr> <Space>
   \ denite#do_map('toggle_select').'j'
@@ -364,3 +366,13 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " === vista.vim === "
 let g:vista_default_executive = 'coc'
 let g:vista#renderer#enable_icon = 1
+
+
+" === yaml-language-server === "
+let g:LanguageClient_serverCommands = {
+\ 'yaml': ['yaml-language-server', '--stdio']                                                                                                                                                                              
+\ }
+augroup LanguageClient_config
+  autocmd!
+  autocmd User LanguageClientStarted call UserName#yaml#SetSchema()
+augroup END
