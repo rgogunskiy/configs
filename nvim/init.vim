@@ -11,6 +11,8 @@ if &compatible
   set nocompatible               " Be iMproved
 endif
 
+set clipboard+=unnamedplus
+
 " Required:
 set runtimepath+=$HOME/.nvim/repos/github.com/Shougo/dein.vim
 
@@ -27,7 +29,8 @@ call dein#add('raghur/fruzzy', {'hook_post_source': 'call fruzzy#install()'})
 call dein#add('vim-airline/vim-airline')
 call dein#add('vim-airline/vim-airline-themes')
 call dein#add('scrooloose/nerdtree')
-call dein#add('scrooloose/nerdcommenter')
+" call dein#add('scrooloose/nerdcommenter')
+call dein#add('tpope/vim-commentary')
 call dein#add('tpope/vim-fugitive')
 call dein#add('hashivim/vim-terraform')
 call dein#add('neoclide/coc.nvim', {'merge':0, 'build': './install.sh nightly'})
@@ -39,6 +42,10 @@ call dein#add('liuchengxu/vista.vim')
 call dein#add('airblade/vim-gitgutter')
 call dein#add('tpope/vim-surround')
 call dein#add('lifepillar/vim-solarized8')
+call dein#add('blueyed/vim-diminactive')
+call dein#add('towolf/vim-helm')
+call dein#add('vimwiki/vimwiki', {'branch': 'dev'})
+call dein#add('dracula/vim', {'as': 'dracule'})
 " Required:
 call dein#end()
 
@@ -65,12 +72,14 @@ set tabstop=2
 set shiftwidth=2
 " On pressing tab, insert 4 spaces
 set expandtab
-" colors zenburn
+"colors zenburn
 "let g:airline_theme='one'
-" colorscheme dracula
- set background=light " for the light version
+colorscheme dracula
+" set background=light " for the light version
 "colorscheme PaperColor
-colorscheme solarized8_high
+" colorscheme solarized8_high
+" highlight ColorColumn ctermbg=0 guibg=#626262
+
 set cursorline
 set cursorcolumn
 
@@ -88,129 +97,7 @@ highlight lCursor guifg=NONE guibg=Cyan
 
 " === NERDTree === "
 map <C-n> :NERDTreeToggle<CR>
-" Wrap in try/catch to avoid errors on initial install before plugin is available
-try
-" === Denite setup ==="
-" Use ripgrep for searching current directory for files
-" By default, ripgrep will respect rules in .gitignore
-"   --files: Print each file that would be searched (but don't search)
-"   --glob:  Include or exclues files for searching that match the given glob
-"            (aka ignore .git files)
-"
-call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
 
-" Use ripgrep in place of "grep"
-call denite#custom#var('grep', 'command', ['rg'])
-
-" Custom options for ripgrep
-"   --vimgrep:  Show results with every match on it's own line
-"   --hidden:   Search hidden directories and files
-"   --heading:  Show the file name above clusters of matches from each file
-"   --S:        Search case insensitively if the pattern is all lowercase
-call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S'])
-
-" Recommended defaults for ripgrep via Denite docs
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-
-" Remove date from buffer list
-call denite#custom#var('buffer', 'date_format', '')
-
-" Custom options for Denite
-"   auto_resize             - Auto resize the Denite window height automatically.
-"   prompt                  - Customize denite prompt
-"   direction               - Specify Denite window direction as directly below current pane
-"   winminheight            - Specify min height for Denite window
-"   highlight_mode_insert   - Specify h1-CursorLine in insert mode
-"   prompt_highlight        - Specify color of prompt
-"   highlight_matched_char  - Matched characters highlight
-"   highlight_matched_range - matched range highlight
-let s:denite_options = {'default' : {
-\ 'split': 'floating',
-\ 'start_filter': 1,
-\ 'auto_resize': 1,
-\ 'source_names': 'short',
-\ 'prompt': 'λ:',
-\ 'statusline': 0,
-\ 'highlight_matched_char': 'WildMenu',
-\ 'highlight_matched_range': 'Visual',
-\ 'highlight_window_background': 'Visual',
-\ 'highlight_filter_background': 'StatusLine',
-\ 'highlight_prompt': 'StatusLine',
-\ 'winrow': 1,
-\ 'vertical_preview': 1
-\ }}
-
-" Loop through denite options and enable them
-function! s:profile(opts) abort
-  for l:fname in keys(a:opts)
-    for l:dopt in keys(a:opts[l:fname])
-      call denite#custom#option(l:fname, l:dopt, a:opts[l:fname][l:dopt])
-    endfor
-  endfor
-endfunction
-
-call s:profile(s:denite_options)
-catch
-  echo 'Denite not installed. It should work after running :PlugInstall'
-endtry
-" === Denite shorcuts === "
-"   ;         - Browser currently open buffers
-"   <leader>t - Browse list of files in current directory
-"   <leader>g - Search current directory for occurences of given term and close window if no results
-"   <leader>j - Search current directory for occurences of word under cursor
-nmap ; :Denite buffer<CR>
-nmap <leader>t :DeniteProjectDir file/rec<CR>
-nnoremap <leader>g :<C-u>Denite grep:. -no-empty<CR>
-nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
-
-" Define mappings while in 'filter' mode
-"   <C-o>         - Switch to normal mode inside of search results
-"   <Esc>         - Exit denite window in any mode
-"   <CR>          - Open currently selected file in any mode
-autocmd FileType denite-filter call s:denite_filter_my_settings()
-function! s:denite_filter_my_settings() abort
-  imap <silent><buffer> <C-o>
-  \ <Plug>(denite_filter_quit)
-  inoremap <silent><buffer><expr> <Esc>
-  \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> <Esc>
-  \ denite#do_map('quit')
-  inoremap <silent><buffer><expr> <CR>
-  \ denite#do_map('do_action')
-endfunction
-
-" Define mappings while in denite window
-"   <CR>        - Opens currently selected file
-"   q or <Esc>  - Quit Denite window
-"   d           - Delete currenly selected file
-"   p           - Preview currently selected file
-"   <C-o> or i  - Switch to insert mode inside of filter prompt
-autocmd FileType denite call s:denite_my_settings()
-function! s:denite_my_settings() abort
-  nnoremap <silent><buffer><expr> <CR>
-  \ denite#do_map('do_action')
-  nnoremap <silent><buffer><expr> q
-  \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> <Esc>
-  \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> d
-  \ denite#do_map('do_action', 'delete')
-  nnoremap <silent><buffer><expr> p
-  \ denite#do_map('do_action', 'preview')
-  nnoremap <silent><buffer><expr> i
-  \ denite#do_map('open_filter_buffer')
-  nnoremap <silent><buffer><expr> <C-o>
-  \ denite#do_map('open_filter_buffer')
-  nnoremap <silent><buffer><expr> <C-v>
-  \ denite#do_map('do_action', 'vsplit')
-  nnoremap <silent><buffer><expr> <C-s>
-  \ denite#do_map('do_action', 'split')
-  nnoremap <silent><buffer><expr> <Space>
-  \ denite#do_map('toggle_select').'j'
-endfunction
 
 " === raghur/fruzzy === "
 " optional - but recommended - see below
@@ -227,12 +114,9 @@ let g:fruzzy#sortonempty = 1 " default value
 " tell denite to use this matcher by default for all sources
 call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
 
-" tell CtrlP to use this matcher
-let g:ctrlp_match_func = {'match': 'fruzzy#ctrlp#matcher'}
-let g:ctrlp_match_current_file = 1 " to include current file in matches
-
-
-" === Vista  === "
+" === vista.vim === "
+let g:vista_default_executive = 'coc'
+let g:vista#renderer#enable_icon = 1
 nmap <F8> :Vista<CR>
 
 " === vim-go ==="
@@ -348,6 +232,10 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 " Using CocList
 " Show all diagnostics
 nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
 " Manage extensions
 nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
 " Show commands
@@ -363,10 +251,6 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
-" === vista.vim === "
-let g:vista_default_executive = 'coc'
-let g:vista#renderer#enable_icon = 1
-
 
 " === yaml-language-server === "
 let g:LanguageClient_serverCommands = {
@@ -376,3 +260,179 @@ augroup LanguageClient_config
   autocmd!
   autocmd User LanguageClientStarted call UserName#yaml#SetSchema()
 augroup END
+
+" === Denite ===
+" Define mappings
+nmap ; :Denite buffer -start-filter grep:::!<CR>
+nmap <leader>t :DeniteProjectDir file/rec -start-filter grep:::!<<CR>
+nnoremap <leader>g :<C-u>Denite grep:. -no-empty<CR>
+nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
+
+" Define mappings while in denite window
+"   <CR>        - Opens currently selected file
+"   q or <Esc>  - Quit Denite window
+"   d           - Delete currenly selected file
+"   p           - Preview currently selected file
+"   <C-o> or i  - Switch to insert mode inside of filter prompt
+"   <C-t>       - Open currently selected file in a new tab
+"   <C-v>       - Open currently selected file a vertical split
+"   <C-h>       - Open currently selected file in a horizontal split
+autocmd FileType denite call s:denite_my_settings()
+	function! s:denite_my_settings() abort
+	  nnoremap <silent><buffer><expr> <CR>
+	  \ denite#do_map('do_action')
+	  nnoremap <silent><buffer><expr> d
+	  \ denite#do_map('do_action', 'delete')
+	  nnoremap <silent><buffer><expr> p
+	  \ denite#do_map('do_action', 'preview')
+	  nnoremap <silent><buffer><expr> q
+	  \ denite#do_map('quit')
+	  nnoremap <silent><buffer><expr> i
+	  \ denite#do_map('open_filter_buffer')
+	  nnoremap <silent><buffer><expr> <Space>
+	  \ denite#do_map('toggle_select').'j'
+    nnoremap <silent><buffer><expr> <C-o>
+    \ denite#do_map('open_filter_buffer')
+    nnoremap <silent><buffer><expr> <C-t>
+    \ denite#do_map('do_action', 'tabopen')
+    nnoremap <silent><buffer><expr> <C-v>
+    \ denite#do_map('do_action', 'vsplit')
+    nnoremap <silent><buffer><expr> <C-h>
+    \ denite#do_map('do_action', 'split')
+	endfunction
+
+" Define mappings while in 'filter' mode
+"   <C-o>         - Switch to normal mode inside of search results
+"   <Esc>         - Exit denite window in any mode
+"   <CR>          - Open currently selected file in any mode
+"   <C-t>         - Open currently selected file in a new tab
+"   <C-v>         - Open currently selected file a vertical split
+"   <C-h>         - Open currently selected file in a horizontal split
+	autocmd FileType denite-filter call s:denite_filter_my_settings()
+	function! s:denite_filter_my_settings() abort
+	  imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)
+    nnoremap <silent><buffer><expr> <Esc>
+    \ denite#do_map('quit')
+    inoremap <silent><buffer><expr> <CR>
+    \ denite#do_map('do_action', 'open')
+    inoremap <silent><buffer><expr> <C-t>
+    \ denite#do_map('do_action', 'tabopen')
+    inoremap <silent><buffer><expr> <C-v>
+    \ denite#do_map('do_action', 'vsplit')
+    inoremap <silent><buffer><expr> <C-h>
+    \ denite#do_map('do_action', 'split')
+	endfunction
+
+	" Change file/rec command.
+	call denite#custom#var('file/rec', 'command',
+	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+	" For python script scantree.py
+	" Read bellow on this file to learn more about scantree.py
+	" call denite#custom#var('file/rec', 'command',
+	" \ ['scantree.py', '--path', ':directory'])
+
+	" Change matchers.
+	call denite#custom#source(
+	\ 'file_mru', 'matchers', ['matcher/fuzzy', 'matcher/project_files'])
+
+	" Change sorters.
+	call denite#custom#source(
+	\ 'file/rec', 'sorters', ['sorter/sublime'])
+
+	" Change default action.
+	call denite#custom#kind('file', 'default_action', 'split')
+
+	" Add custom menus
+	let s:menus = {}
+
+	let s:menus.zsh = {
+		\ 'description': 'Edit your import zsh configuration'
+		\ }
+	let s:menus.zsh.file_candidates = [
+		\ ['zshrc', '~/.config/zsh/.zshrc'],
+		\ ['zshenv', '~/.zshenv'],
+		\ ]
+
+	let s:menus.my_commands = {
+		\ 'description': 'Example commands'
+		\ }
+	let s:menus.my_commands.command_candidates = [
+		\ ['Split the window', 'vnew'],
+		\ ['Open zsh menu', 'Denite menu:zsh'],
+		\ ['Format code', 'FormatCode', 'go,python'],
+		\ ]
+
+	call denite#custom#var('menu', 'menus', s:menus)
+
+	" Ag command on grep source
+	call denite#custom#var('grep', 'command', ['ag'])
+	call denite#custom#var('grep', 'default_opts',
+			\ ['-i', '--vimgrep'])
+	call denite#custom#var('grep', 'recursive_opts', [])
+	call denite#custom#var('grep', 'pattern_opt', [])
+	call denite#custom#var('grep', 'separator', ['--'])
+	call denite#custom#var('grep', 'final_opts', [])
+
+	" " Ripgrep command on grep source
+	" call denite#custom#var('grep', 'command', ['rg'])
+	" call denite#custom#var('grep', 'default_opts',
+	" 		\ ['-i', '--vimgrep', '--no-heading'])
+	" call denite#custom#var('grep', 'recursive_opts', [])
+	" call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+	" call denite#custom#var('grep', 'separator', ['--'])
+	" call denite#custom#var('grep', 'final_opts', [])
+
+	" Specify multiple paths in grep source
+	"call denite#start([{'name': 'grep',
+	"      \ 'args': [['a.vim', 'b.vim'], '', 'pattern']}])
+
+	" Define alias
+	call denite#custom#alias('source', 'file/rec/git', 'file/rec')
+	call denite#custom#var('file/rec/git', 'command',
+	      \ ['git', 'ls-files', '-co', '--exclude-standard'])
+
+	" Change ignore_globs
+	call denite#custom#filter('matcher/ignore_globs', 'ignore_globs',
+	      \ [ '.git/', '.ropeproject/', '__pycache__/',
+	      \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
+
+	" Custom action
+	" Note: lambda function is not supported in Vim8.
+	call denite#custom#action('file', 'test',
+	      \ {context -> execute('let g:foo = 1')})
+	call denite#custom#action('file', 'test2',
+	      \ {context -> denite#do_action(
+	      \  context, 'open', context['targets'])})
+
+
+
+""" KEYBINDING 
+" Next/Prev tab
+nnoremap H gT
+nnoremap L gt
+
+
+
+function! s:ScratchGenerator()
+  echom "Creating scratchy..."
+  exe "new" . "__Scratchy__"
+  echom "Scratchy created!"
+endfunction
+
+function! s:ScratchMarkBuffer()
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+endfunction
+
+autocmd BufNewFile __Scratchy__ call s:ScratchMarkBuffer()
+command! Scratchy call s:ScratchGenerator()
+
+nnoremap <C-s> :Scratchy<CR>
+
+
+let g:vimwiki_list = [{'path': '~/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+
+"""autocmd FileType vimwiki set ft=markdown
+

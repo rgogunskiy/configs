@@ -3,7 +3,8 @@
   "python.setInterpreter": "~/.pyenv/versions/nvim3/bin/python",
   "solargraph.commandPath": "/usr/local/lib/ruby/gems/2.6.0/bin/solargraph",
   "yaml.schemas": {
-      "http://json.schemastore.org/ansible-stable-2.7": "/*.yml"
+      "http://json.schemastore.org/ansible-stable-2.7": "*/ansible/*.yml",
+      "Kubernetes": "*/*.yaml"
   },
   "languageserver": {
     "golang": {
@@ -25,7 +26,6 @@
            "directory": "/tmp/ccls"
          },
          "clang": {
-           // make sure you have installed commandLineTools
           "resourceDir": "/Library/Developer/CommandLineTools/usr/lib/clang/11.0.0",
           "extraArgs": [
             "-isystem",
