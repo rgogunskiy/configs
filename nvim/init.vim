@@ -73,10 +73,10 @@ set shiftwidth=2
 set expandtab
 "colors zenburn
 "let g:airline_theme='one'
-colorscheme dracula
-" set background=light " for the light version
+" colorscheme dracula
+ set background=light " for the light version
 "colorscheme PaperColor
-" colorscheme solarized8_high
+ colorscheme solarized8_high
 " highlight ColorColumn ctermbg=0 guibg=#626262
 
 set cursorline

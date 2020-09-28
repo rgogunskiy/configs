@@ -3,7 +3,8 @@
   "python.setInterpreter": "~/.pyenv/versions/nvim3/bin/python",
   "solargraph.commandPath": "/usr/local/lib/ruby/gems/2.6.0/bin/solargraph",
   "yaml.schemas": {
-      "http://json.schemastore.org/ansible-stable-2.7": "*/ansible/*.yml",
+      "https://json.schemastore.org/ansible-role-2.9": "roles/*/tasks/*.yml",
+      "https://json.schemastore.org/ansible-playbook": "*playbook*.yml",
       "Kubernetes": "*/*.yaml"
   },
   "languageserver": {
@@ -16,25 +17,6 @@
       "command": "docker-langserver",
       "filetypes": ["dockerfile"],
       "args": ["--stdio"]
-    },
-    "ccls": {
-      "command": "ccls",
-      "filetypes": ["c", "cpp", "objc", "objcpp"],
-      "rootPatterns": [".ccls", "compile_commands.json", ".vim/", ".git/", ".hg/"],
-      "initializationOptions": {
-         "cache": {
-           "directory": "/tmp/ccls"
-         },
-         "clang": {
-          "resourceDir": "/Library/Developer/CommandLineTools/usr/lib/clang/11.0.0",
-          "extraArgs": [
-            "-isystem",
-            "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1",
-            "-I",
-            "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"        
-          ]
-        }
-       }
     }
   }
 }
