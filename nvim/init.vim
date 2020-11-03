@@ -1,6 +1,6 @@
 let g:python3_host_prog = $HOME.'/.pyenv/versions/nvim3/bin/python'
 let g:python_host_prog = $HOME.'/.pyenv/versions/nvim2/bin/python'
-let g:ruby_host_prog = '/usr/local/lib/ruby/gems/2.6.0/bin/neovim-ruby-host'
+let g:ruby_host_prog = '/usr/local/lib/ruby/gems/2.7.0/bin/neovim-ruby-host'
 " If installed using Homebrew
 set rtp+=/usr/local/opt/fzf
 " fix issue with spurious q's appearing 
@@ -122,6 +122,8 @@ nmap <F8> :Vista<CR>
 " disable vim-go :GoDef short cut (gd)
 " this is handled by LanguageClient [LC]
 let g:go_def_mapping_enabled = 0 
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
 
 " === coc.vim === "
 " if hidden is not set, TextEdit might fail.
@@ -264,6 +266,7 @@ augroup END
 " Define mappings
 nmap ; :Denite buffer -start-filter grep:::!<CR>
 nmap <leader>t :DeniteProjectDir file/rec -start-filter grep:::!<<CR>
+nnoremap <silent> <leader>a :Denite -start-filter grep:::!<CR>
 nnoremap <leader>g :<C-u>Denite grep:. -no-empty<CR>
 nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
 
@@ -323,8 +326,10 @@ autocmd FileType denite call s:denite_my_settings()
 	endfunction
 
 	" Change file/rec command.
-	call denite#custom#var('file/rec', 'command',
-	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+	" call denite#custom#var('file/rec', 'command',
+	" \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+  call denite#custom#var('file/rec', 'command',
+	\ ['rg', '--files', '--glob', '!.git', '--color', 'never'])
 	" For python script scantree.py
 	" Read bellow on this file to learn more about scantree.py
 	" call denite#custom#var('file/rec', 'command',
@@ -362,15 +367,23 @@ autocmd FileType denite call s:denite_my_settings()
 		\ ]
 
 	call denite#custom#var('menu', 'menus', s:menus)
-
-	" Ag command on grep source
-	call denite#custom#var('grep', 'command', ['ag'])
-	call denite#custom#var('grep', 'default_opts',
-			\ ['-i', '--vimgrep'])
-	call denite#custom#var('grep', 'recursive_opts', [])
-	call denite#custom#var('grep', 'pattern_opt', [])
-	call denite#custom#var('grep', 'separator', ['--'])
-	call denite#custom#var('grep', 'final_opts', [])
+	" Ripgrep command on grep source
+	call denite#custom#var('grep', {
+		\ 'command': ['rg'],
+		\ 'default_opts': ['-i', '--vimgrep', '--no-heading'],
+		\ 'recursive_opts': [],
+		\ 'pattern_opt': ['--regexp'],
+		\ 'separator': ['--'],
+		\ 'final_opts': [],
+		\ })
+	" " Ag command on grep source
+	" call denite#custom#var('grep', 'command', ['ag'])
+	" call denite#custom#var('grep', 'default_opts',
+	" 		\ ['-i', '--vimgrep'])
+	" call denite#custom#var('grep', 'recursive_opts', [])
+	" call denite#custom#var('grep', 'pattern_opt', [])
+	" call denite#custom#var('grep', 'separator', ['--'])
+	" call denite#custom#var('grep', 'final_opts', [])
 
 	" " Ripgrep command on grep source
 	" call denite#custom#var('grep', 'command', ['rg'])

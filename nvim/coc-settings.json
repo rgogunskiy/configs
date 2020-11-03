@@ -1,19 +1,18 @@
 {
   "python.jediEnabled": false,
   "python.setInterpreter": "~/.pyenv/versions/nvim3/bin/python",
-  "solargraph.commandPath": "/usr/local/lib/ruby/gems/2.6.0/bin/solargraph",
+  "solargraph.commandPath": "/usr/local/lib/ruby/gems/2.7.0/bin/solargraph",
   "yaml.schemas": {
-      "https://json.schemastore.org/ansible-role-2.9": "roles/*/tasks/*.yml",
-      "https://json.schemastore.org/ansible-playbook": "*playbook*.yml",
-      "Kubernetes": "*/*.yaml"
+      "https://json.schemastore.org/ansible-role-2.9": "roles/*/*/*.yml",
+      "https://json.schemastore.org/ansible-playbook": "*playbook*.yml"
   },
   "languageserver": {
     "golang": {
-      "command": "~/go/bin/gopls",
+      "command": "gopls",
       "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
       "filetypes": ["go"]
     },
-    "dockerfile": {
+   "dockerfile": {
       "command": "docker-langserver",
       "filetypes": ["dockerfile"],
       "args": ["--stdio"]
