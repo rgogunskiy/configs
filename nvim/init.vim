@@ -75,8 +75,9 @@ set expandtab
 "let g:airline_theme='one'
 " colorscheme dracula
  set background=light " for the light version
-"colorscheme PaperColor
- colorscheme solarized8_high
+" colorscheme dracula
+" colorscheme PaperColor
+colorscheme solarized8_high
 " highlight ColorColumn ctermbg=0 guibg=#626262
 
 set cursorline

@@ -4,13 +4,19 @@
   "solargraph.commandPath": "/usr/local/lib/ruby/gems/2.7.0/bin/solargraph",
   "yaml.schemas": {
       "https://json.schemastore.org/ansible-role-2.9": "roles/*/*/*.yml",
+      "https://json.schemastore.org/ansible-inventory": "*inventory*.yml",
       "https://json.schemastore.org/ansible-playbook": "*playbook*.yml"
   },
   "languageserver": {
     "golang": {
       "command": "gopls",
       "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
-      "filetypes": ["go"]
+      "filetypes": ["go"],
+      "disableWorkspaceFolders": true,
+      "filetypes": ["go"],
+      "initializationOptions": {
+        "completeUnimported": true
+      }
     },
    "dockerfile": {
       "command": "docker-langserver",
