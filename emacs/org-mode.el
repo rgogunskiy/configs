@@ -15,19 +15,11 @@
                              "~/Dropbox/org/inbox.org"
 			     "~/Dropbox/org/personal.org"
 			     "~/Dropbox/org/research.org"
+			     "~/Dropbox/org/refile.org"
 			     ))
 
-
-(setq org-capture-templates '(("t" "Todo [inbox]" entry
-                               (file+headline "~/Dropbox/org/inbox.org" "Tasks")
-                               "* TODO %i%?")
-			      ("T" "Tickler" entry
-                               (file+headline "~/Dropbox/org/tickler.org" "Tickler")
-                               "* %i%? \n %U")))
-							 
-
-(setq org-refile-targets '((nil :maxlevel . 2)))
-
+;; (setq org-refile-targets '((nil :maxlevel . 2)))
+(setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
 (setq org-agenda-custom-commands 
       '(("o" "At the work" tags-todo "@work"
          ((org-agenda-overriding-header "Work")
@@ -36,7 +28,8 @@
 	 ((org-agenda-overriding-header "Inbox")))
 	("r" "Research" tags-todo "@research"
 	 ((org-agenda-overriding-header "Research")))
-	))
+	("m" "Refile" tags-todo "REFILE"
+	 ((org-agenda-overriding-header "Refile")))))
 
 (defun my-org-agenda-skip-all-siblings-but-first ()
   "Skip all but the first non-done entry."
@@ -53,3 +46,9 @@
 		  
 (defun org-current-is-todo ()
   (string= "TODO" (org-get-todo-state)))
+
+
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/Dropbox/org/refile.org" "Tasks")
+         "* TODO %?")
+	))

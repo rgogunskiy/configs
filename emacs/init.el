@@ -28,6 +28,7 @@
 
 ;; Some platform specific binding
 (when (eq system-type 'darwin) ;; mac specific settings
+  (setq mac-command-modifier 'super)
   (setq mac-right-option-modifier 'control)
   (setq mac-right-command-modifier 'meta)
   (global-set-key [kp-delete] 'delete-char) ;; sets fn-delete to be right-delete
@@ -49,8 +50,9 @@
 (cond
  ((string-equal system-type "darwin") ; Mac OS X
   ;; (set-default-font "Droid Sans Mono Slashed for Powerline-14"))
-  (set-default-font "Fira Code-14"))
- ((string-equal system-type "gnu/linux") ; linux
+  ;; (set-default-font "Fira Code-14")
+  (set-default-font "FuraCode Nerd Font-14"))
+ ((String-equal system-type "gnu/linux") ; linux
   ;; (set-default-font "Terminess Powerline-10")))
   ;; (set-default-font "Source Code Pro for Powerline-10")))
   (set-default-font "Droid Sans Mono Slashed for Powerline-12")))
@@ -139,6 +141,12 @@
 ;;   (kaolin-treemacs-theme)
 ;;   )
 
+(use-package solarized-theme
+  :ensure t
+  :config
+  (load-theme 'solarized-light t)
+  )
+
 (use-package json-mode
   :ensure t
   )
@@ -225,7 +233,7 @@
   (setq lsp-prefer-flymake nil)
   :hook
   (go-mode . lsp)
-  (yaml-mode . lsp)
+  ;; (yaml-mode . lsp)
   (python-mode . lsp)
   (c-mode . lsp)
   (c++-mode . lsp)
@@ -293,9 +301,9 @@
   :config
   (add-hook 'yaml-mode-hook #'lsp))
 
-(use-package junos-mode
-  :load-path "my_packages/junos-mode"
-)
+;; (use-package junos-mode
+;;   :load-path "my_packages/junos-mode"
+;; )
 
 (use-package go-rename
   :ensure t
@@ -408,6 +416,8 @@ inserted between the braces between the braces."
 
 (load-file "~/configs/emacs/org-mode.el")
 (load-file "~/configs/emacs/gnus.el")
+;; (load-file "~/configs/emacs/mu4e.el")
+
 
 (provide 'init)
 
