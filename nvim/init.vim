@@ -327,11 +327,11 @@ autocmd FileType denite call s:denite_my_settings()
 	endfunction
 
 	" Change file/rec command.
-	" call denite#custom#var('file/rec', 'command',
-	" \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-  call denite#custom#var('file/rec', 'command',
-	\ ['rg', '--files', '--glob', '!.git', '--color', 'never'])
-	" For python script scantree.py
+	call denite#custom#var('file/rec', 'command',
+	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+  " call denite#custom#var('file/rec', 'command',
+	" \ ['rg', '--files', '--glob', '!.git', '--color', 'never'])
+	" " For python script scantree.py
 	" Read bellow on this file to learn more about scantree.py
 	" call denite#custom#var('file/rec', 'command',
 	" \ ['scantree.py', '--path', ':directory'])
@@ -368,24 +368,8 @@ autocmd FileType denite call s:denite_my_settings()
 		\ ]
 
 	call denite#custom#var('menu', 'menus', s:menus)
-	" Ripgrep command on grep source
-	call denite#custom#var('grep', {
-		\ 'command': ['rg'],
-		\ 'default_opts': ['-i', '--vimgrep', '--no-heading'],
-		\ 'recursive_opts': [],
-		\ 'pattern_opt': ['--regexp'],
-		\ 'separator': ['--'],
-		\ 'final_opts': [],
-		\ })
-	" " Ag command on grep source
-	" call denite#custom#var('grep', 'command', ['ag'])
-	" call denite#custom#var('grep', 'default_opts',
-	" 		\ ['-i', '--vimgrep'])
-	" call denite#custom#var('grep', 'recursive_opts', [])
-	" call denite#custom#var('grep', 'pattern_opt', [])
-	" call denite#custom#var('grep', 'separator', ['--'])
-	" call denite#custom#var('grep', 'final_opts', [])
-
+  " call denite#custom#var('file/rec', 'command',
+	" \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 	" " Ripgrep command on grep source
 	" call denite#custom#var('grep', 'command', ['rg'])
 	" call denite#custom#var('grep', 'default_opts',
