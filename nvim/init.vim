@@ -1,65 +1,81 @@
-let g:python3_host_prog = $HOME.'/.pyenv/versions/nvim3/bin/python'
-let g:python_host_prog = $HOME.'/.pyenv/versions/nvim2/bin/python'
-let g:ruby_host_prog = '/usr/local/lib/ruby/gems/2.7.0/bin/neovim-ruby-host'
-" If installed using Homebrew
-set rtp+=/usr/local/opt/fzf
+let g:is_win = has('win32') || has('win64')
+let g:is_linux = has('unix') && !has('macunix')
+let g:is_mac = has('macunix')
 " fix issue with spurious q's appearing 
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0 
 set guicursor=
-"dein Scripts-----------------------------
-if &compatible
-  set nocompatible               " Be iMproved
-endif
+set nocompatible               " Be iMproved
 
 set clipboard+=unnamedplus
 
-" Required:
-set runtimepath+=$HOME/.nvim/repos/github.com/Shougo/dein.vim
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'scrooloose/nerdtree'
+" Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'hashivim/vim-terraform'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'fatih/vim-go'
+Plug 'rust-lang/rust.vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'liuchengxu/vista.vim'
+Plug 'preservim/tagbar'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-surround'
+Plug 'lifepillar/vim-solarized8'
+Plug 'blueyed/vim-diminactive'
+Plug 'towolf/vim-helm'
+Plug 'vimwiki/vimwiki', {'branch': 'dev'}
+Plug 'dracula/vim', {'as': 'dracule'}
+"{{ Plugins for markdown writing
+" Another markdown plugin
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 
-" Required:
-call dein#begin('$HOME/.nvim')
+" Faster footnote generation
+Plug 'vim-pandoc/vim-markdownfootnotes', { 'for': 'markdown' }
 
-" Let dein manage dein
-" Required:
-call dein#add('Shougo/dein.vim')
+" Vim tabular plugin for manipulate tabular, required by markdown plugins
+Plug 'godlygeek/tabular', {'on': 'Tabularize'}
 
-" Add or remove your plugins here:
-call dein#add('Shougo/denite.nvim')
-call dein#add('raghur/fruzzy', {'hook_post_source': 'call fruzzy#install()'})
-call dein#add('vim-airline/vim-airline')
-call dein#add('vim-airline/vim-airline-themes')
-call dein#add('scrooloose/nerdtree')
-" call dein#add('scrooloose/nerdcommenter')
-call dein#add('tpope/vim-commentary')
-call dein#add('tpope/vim-fugitive')
-call dein#add('hashivim/vim-terraform')
-call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
-call dein#add('fatih/vim-go')
-call dein#add('jiangmiao/auto-pairs')
-call dein#add('NLKNguyen/papercolor-theme')
-call dein#add('liuchengxu/vista.vim')
-call dein#add('airblade/vim-gitgutter')
-call dein#add('tpope/vim-surround')
-call dein#add('lifepillar/vim-solarized8')
-call dein#add('blueyed/vim-diminactive')
-call dein#add('towolf/vim-helm')
-call dein#add('vimwiki/vimwiki', {'branch': 'dev'})
-call dein#add('dracula/vim', {'as': 'dracule'})
-" Required:
-call dein#end()
+" Markdown JSON header highlight plugin
+Plug 'elzr/vim-json', { 'for': ['json', 'markdown'] }
+
+" Markdown previewing (only for Mac and Windows)
+if g:is_win || g:is_mac
+  Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug'] }
+endif
+
+if g:is_mac
+  Plug 'rhysd/vim-grammarous'
+endif
+
+Plug 'chrisbra/unicode.vim'
+Plug 'mtth/scratch.vim'
+"}}
+
+" C++ semantic highlighting
+if executable('clangd')
+  Plug 'jackguo380/vim-lsp-cxx-highlight'
+endif
+" Super fast movement with vim-sneak
+Plug 'justinmk/vim-sneak'
+if g:is_win || g:is_mac
+  " open URL in browser
+  Plug 'tyru/open-browser.vim'
+endif
+
+" Initialize plugin system
+call plug#end()
 
 " Required:
 filetype plugin on
 filetype plugin indent on
 syntax enable
-
-" If you want to install not installed plugins on startup.
-if dein#check_install()
-  call dein#install()
-endif
-
-call map(dein#check_clean(), "delete(v:val, 'rf')")
-"End dein Scripts-------------------------
 
 " UI
 set termguicolors
@@ -101,7 +117,7 @@ map <C-n> :NERDTreeToggle<CR>
 
 " === raghur/fruzzy === "
 " optional - but recommended - see below
-let g:fruzzy#usenative = 1
+" let g:fruzzy#usenative = 1
 
 " When there's no input, fruzzy can sort entries based on how similar they are to the current buffer
 " For ex: if you're on /path/to/somefile.h, then on opening denite, /path/to/somefile.cpp
@@ -109,14 +125,16 @@ let g:fruzzy#usenative = 1
 " Useful if you're bouncing a lot between similar files.
 " To turn off this behavior, set the variable below  to 0
 
-let g:fruzzy#sortonempty = 1 " default value
+" let g:fruzzy#sortonempty = 1 " default value
 
 " tell denite to use this matcher by default for all sources
-call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
+" call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
 
 " === vista.vim === "
-let g:vista_default_executive = 'coc'
+let g:vista_default_executive = 'ctags'
 let g:vista#renderer#enable_icon = 1
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_fzf_preview = ['right:50%']
 nmap <F8> :Vista<CR>
 
 " === vim-go ==="
@@ -263,146 +281,6 @@ augroup LanguageClient_config
   autocmd User LanguageClientStarted call UserName#yaml#SetSchema()
 augroup END
 
-" === Denite ===
-" Define mappings
-nmap ; :Denite buffer -start-filter grep:::!<CR>
-nmap <leader>t :DeniteProjectDir file/rec -start-filter grep:::!<<CR>
-nnoremap <silent> <leader>a :Denite -start-filter grep:::!<CR>
-nnoremap <leader>g :<C-u>Denite grep:. -no-empty<CR>
-nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
-
-" Define mappings while in denite window
-"   <CR>        - Opens currently selected file
-"   q or <Esc>  - Quit Denite window
-"   d           - Delete currenly selected file
-"   p           - Preview currently selected file
-"   <C-o> or i  - Switch to insert mode inside of filter prompt
-"   <C-t>       - Open currently selected file in a new tab
-"   <C-v>       - Open currently selected file a vertical split
-"   <C-h>       - Open currently selected file in a horizontal split
-autocmd FileType denite call s:denite_my_settings()
-	function! s:denite_my_settings() abort
-	  nnoremap <silent><buffer><expr> <CR>
-	  \ denite#do_map('do_action')
-	  nnoremap <silent><buffer><expr> d
-	  \ denite#do_map('do_action', 'delete')
-	  nnoremap <silent><buffer><expr> p
-	  \ denite#do_map('do_action', 'preview')
-	  nnoremap <silent><buffer><expr> q
-	  \ denite#do_map('quit')
-	  nnoremap <silent><buffer><expr> i
-	  \ denite#do_map('open_filter_buffer')
-	  nnoremap <silent><buffer><expr> <Space>
-	  \ denite#do_map('toggle_select').'j'
-    nnoremap <silent><buffer><expr> <C-o>
-    \ denite#do_map('open_filter_buffer')
-    nnoremap <silent><buffer><expr> <C-t>
-    \ denite#do_map('do_action', 'tabopen')
-    nnoremap <silent><buffer><expr> <C-v>
-    \ denite#do_map('do_action', 'vsplit')
-    nnoremap <silent><buffer><expr> <C-h>
-    \ denite#do_map('do_action', 'split')
-	endfunction
-
-" Define mappings while in 'filter' mode
-"   <C-o>         - Switch to normal mode inside of search results
-"   <Esc>         - Exit denite window in any mode
-"   <CR>          - Open currently selected file in any mode
-"   <C-t>         - Open currently selected file in a new tab
-"   <C-v>         - Open currently selected file a vertical split
-"   <C-h>         - Open currently selected file in a horizontal split
-	autocmd FileType denite-filter call s:denite_filter_my_settings()
-	function! s:denite_filter_my_settings() abort
-	  imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)
-    nnoremap <silent><buffer><expr> <Esc>
-    \ denite#do_map('quit')
-    inoremap <silent><buffer><expr> <CR>
-    \ denite#do_map('do_action', 'open')
-    inoremap <silent><buffer><expr> <C-t>
-    \ denite#do_map('do_action', 'tabopen')
-    inoremap <silent><buffer><expr> <C-v>
-    \ denite#do_map('do_action', 'vsplit')
-    inoremap <silent><buffer><expr> <C-h>
-    \ denite#do_map('do_action', 'split')
-	endfunction
-
-	" Change file/rec command.
-	call denite#custom#var('file/rec', 'command',
-	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-  " call denite#custom#var('file/rec', 'command',
-	" \ ['rg', '--files', '--glob', '!.git', '--color', 'never'])
-	" " For python script scantree.py
-	" Read bellow on this file to learn more about scantree.py
-	" call denite#custom#var('file/rec', 'command',
-	" \ ['scantree.py', '--path', ':directory'])
-
-	" Change matchers.
-	call denite#custom#source(
-	\ 'file_mru', 'matchers', ['matcher/fuzzy', 'matcher/project_files'])
-
-	" Change sorters.
-	call denite#custom#source(
-	\ 'file/rec', 'sorters', ['sorter/sublime'])
-
-	" Change default action.
-	call denite#custom#kind('file', 'default_action', 'split')
-
-	" Add custom menus
-	let s:menus = {}
-
-	let s:menus.zsh = {
-		\ 'description': 'Edit your import zsh configuration'
-		\ }
-	let s:menus.zsh.file_candidates = [
-		\ ['zshrc', '~/.config/zsh/.zshrc'],
-		\ ['zshenv', '~/.zshenv'],
-		\ ]
-
-	let s:menus.my_commands = {
-		\ 'description': 'Example commands'
-		\ }
-	let s:menus.my_commands.command_candidates = [
-		\ ['Split the window', 'vnew'],
-		\ ['Open zsh menu', 'Denite menu:zsh'],
-		\ ['Format code', 'FormatCode', 'go,python'],
-		\ ]
-
-	call denite#custom#var('menu', 'menus', s:menus)
-  " call denite#custom#var('file/rec', 'command',
-	" \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-	" " Ripgrep command on grep source
-	" call denite#custom#var('grep', 'command', ['rg'])
-	" call denite#custom#var('grep', 'default_opts',
-	" 		\ ['-i', '--vimgrep', '--no-heading'])
-	" call denite#custom#var('grep', 'recursive_opts', [])
-	" call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-	" call denite#custom#var('grep', 'separator', ['--'])
-	" call denite#custom#var('grep', 'final_opts', [])
-
-	" Specify multiple paths in grep source
-	"call denite#start([{'name': 'grep',
-	"      \ 'args': [['a.vim', 'b.vim'], '', 'pattern']}])
-
-	" Define alias
-	call denite#custom#alias('source', 'file/rec/git', 'file/rec')
-	call denite#custom#var('file/rec/git', 'command',
-	      \ ['git', 'ls-files', '-co', '--exclude-standard'])
-
-	" Change ignore_globs
-	call denite#custom#filter('matcher/ignore_globs', 'ignore_globs',
-	      \ [ '.git/', '.ropeproject/', '__pycache__/',
-	      \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
-
-	" Custom action
-	" Note: lambda function is not supported in Vim8.
-	call denite#custom#action('file', 'test',
-	      \ {context -> execute('let g:foo = 1')})
-	call denite#custom#action('file', 'test2',
-	      \ {context -> denite#do_action(
-	      \  context, 'open', context['targets'])})
-
-
-
 """ KEYBINDING 
 " Next/Prev tab
 nnoremap H gT
@@ -428,8 +306,73 @@ command! Scratchy call s:ScratchGenerator()
 nnoremap <C-s> :Scratchy<CR>
 
 
-let g:vimwiki_list = [{'path': '~/vimwiki/',
-                      \ 'syntax': 'markdown', 'ext': '.md'}]
+" let g:vimwiki_list = [{'path': '~/vimwiki/',
+"                       \ 'syntax': 'markdown', 'ext': '.md'}]
 
 """autocmd FileType vimwiki set ft=markdown
 
+let $FZF_DEFAULT_OPTS = '--layout=reverse'
+
+let g:fzf_layout = { 'window': 'call OpenFloatingWin()' }
+
+function! OpenFloatingWin()
+  let height = &lines - 3
+  let width = float2nr(&columns - (&columns * 2 / 10))
+  let col = float2nr((&columns - width) / 2)
+
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': height * 0.3,
+        \ 'col': col + 30,
+        \ 'width': width * 2 / 3,
+        \ 'height': height / 2
+        \ }
+
+  let buf = nvim_create_buf(v:false, v:true)
+  let win = nvim_open_win(buf, v:true, opts)
+
+  call setwinvar(win, '&winhl', 'Normal:Pmenu')
+
+  setlocal
+        \ buftype=nofile
+        \ nobuflisted
+        \ bufhidden=hide
+        \ nonumber
+        \ norelativenumber
+        \ signcolumn=no
+endfunction
+
+" PLUGIN: FZF
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <C-f> :Files<CR>
+nnoremap <silent> <Leader>f :Ag<CR>
+nnoremap <silent> <Leader>/ :BLines<CR>
+nnoremap <silent> <Leader>' :Marks<CR>
+nnoremap <silent> <Leader>g :Commits<CR>
+nnoremap <silent> <Leader>H :Helptags<CR>
+nnoremap <silent> <Leader>hh :History<CR>
+nnoremap <silent> <Leader>h: :History:<CR>
+nnoremap <silent> <Leader>h/ :History/<CR>
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+
+
+" disable header folding
+let g:vim_markdown_folding_disabled = 1
+
+" do not use conceal feature, the implementation is not so good
+let g:vim_markdown_conceal = 0
+
+" disable math tex conceal feature
+let g:tex_conceal = ""
+let g:vim_markdown_math = 1
+
+" support front matter of various format
+let g:vim_markdown_frontmatter = 1  " for YAML format
+let g:vim_markdown_toml_frontmatter = 1  " for TOML format
+let g:vim_markdown_json_frontmatter = 1  " for JSON format
+
+" PLUGIN: scratch.vim
+let g:scratch_persistence_file="~/.vim/scratchpad.txt"
